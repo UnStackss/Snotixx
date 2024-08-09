@@ -18,12 +18,18 @@ module.exports = {
     ],
 
     async execute({ inter, client }) {
+        console.log('Command "play" triggered by user:', inter.user.id); // Debug
+
         const player = useMainPlayer();
         const song = inter.options.getString('song');
         const channel = inter.member.voice.channel;
 
+        console.log('Song requested:', song); // Debug
+        console.log('Voice channel:', channel ? channel.name : 'None'); // Debug
+
         // Assicurati che l'interazione sia deferita se l'operazione richiede tempo
         if (!inter.replied && !inter.deferred) {
+            console.log('Defer reply'); // Debug
             await inter.deferReply();
         }
 
@@ -31,12 +37,15 @@ module.exports = {
         const isAuthorized = inter.user.id === MY_ID;
         const isSpotifyOrSoundCloud = song.includes('spotify.com') || song.includes('soundcloud.com');
 
+        console.log('Is authorized:', isAuthorized); // Debug
+
         if (isSpotifyOrSoundCloud && !isAuthorized) {
+            console.log('User not authorized to play Spotify/SoundCloud'); // Debug
             const premiumEmbed = new EmbedBuilder()
                 .setTitle('🔒 Access Restricted')
                 .setDescription('This feature is restricted to specific users. To gain access, consider purchasing **Snotix Premium** for just **2,99€ per month** from our store!')
                 .addFields(
-                    { name: 'Premium Benefits', value: '• Access to Spotify and SoundCloud links\n• Priority support\n• And more!' },
+                    { name: 'Premium Benefits', value: '• Dashboard\n• Spotify And SoundCloud Support\n• Filters\n• Priority support\n• And more!' },
                     { name: 'Subscribe Now', value: '[Click here to purchase Snotix Premium](https://discord.com/application-directory/1270321783349968978/store)' }
                 )
                 .setColor('#ff0000')
@@ -49,6 +58,7 @@ module.exports = {
         }
 
         try {
+            console.log('Searching for the song...'); // Debug
             const res = await player.search(song, {
                 requestedBy: inter.member,
                 searchEngine: QueryType.AUTO
@@ -56,11 +66,14 @@ module.exports = {
 
             let defaultEmbed = new EmbedBuilder().setColor('#2f3136');
 
+            console.log('Search results:', res?.tracks?.length || 'None'); // Debug
+
             if (!res?.tracks.length) {
                 defaultEmbed.setAuthor({ name: await Translate('No results found... try again? <❌>') });
                 return inter.editReply({ embeds: [defaultEmbed] });
             }
 
+            console.log('Playing the song...'); // Debug
             const { track } = await player.play(channel, song, {
                 nodeOptions: {
                     metadata: {
@@ -74,6 +87,7 @@ module.exports = {
                 }
             });
 
+            console.log('Song added to queue:', track.title); // Debug
             defaultEmbed.setAuthor({ name: await Translate(`Loading <${track.title}> to the queue... <✅>`) });
             await inter.editReply({ embeds: [defaultEmbed] });
 

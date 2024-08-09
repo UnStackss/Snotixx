@@ -1,6 +1,6 @@
 module.exports = {
     app: {
-        token: "MTI3MDMyMTc4MzM0OTk2ODk3OA.GBGzY-.h9xDsk2gmQWzD0B3l1ePa3a0sc8haoTV0hNP8A",
+        token: "TOKEN-HERE",
         playing: "Do /help",
         global: true,
         guild: "1270312699397668886", 

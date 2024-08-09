@@ -25,7 +25,7 @@ module.exports = {
                 .setTitle('🔒 Access Restricted')
                 .setDescription('This command is restricted to specific users. To gain access, consider purchasing **Snotix Premium** for just **2,99€ per month** from our store!')
                 .addFields(
-                    { name: 'Premium Benefits', value: '• Access to all exclusive commands\n• Priority support\n• And more!' },
+                    { name: 'Premium Benefits', value: '• Dashboard\n• Spotify And SoundCloud Support\n• Filters\n• Priority support\n• And more!' },
                     { name: 'Subscribe Now', value: `[Click here to purchase Snotix Premium](${STORE_URL})` }
                 )
                 .setColor('#ff0000')
